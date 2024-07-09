@@ -1,0 +1,6 @@
+{
+    "event_name": "anki",
+    "event_color_id": 10,
+    "calendar_name": "auto-calendar",
+    "min_event_time": 300
+}
