@@ -23,7 +23,7 @@ start = None
 @gui_hooks.reviewer_did_init.append
 def init(_) -> None:
     global calendar_id
-    access_token = authorize()
+    access_token = authorize(user_config.get("client_secret"))
 
     cal_name = user_config.get("calendar_name")
     calendar = get_calendar_by_name(access_token, cal_name)
@@ -58,7 +58,7 @@ def end_timer() -> None:
         min_time = timedelta(seconds=user_config.get("min_event_time"))
 
         if duration >= min_time:
-            access_token = authorize()
+            access_token = authorize(user_config.get("client_secret"))
             create_calendar_event(
                 access_token,
                 calendar_id,
