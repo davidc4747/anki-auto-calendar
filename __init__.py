@@ -1,13 +1,11 @@
 import os
 import sys
 from datetime import datetime, timezone, timedelta
-from typing import Optional, Union
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lib"))
 
 from anki.collection import Card
 from aqt import mw, gui_hooks
-from aqt.utils import showInfo
 
 from .google.auth import authorize
 from .google.calendar import (
@@ -22,6 +20,7 @@ calendar_id = None
 start = None
 
 
+@gui_hooks.reviewer_did_init.append
 def init(_) -> None:
     global calendar_id
     access_token = authorize()
@@ -36,20 +35,15 @@ def init(_) -> None:
         calendar_id = create_calendar(access_token, cal_name).get("id")
 
 
-gui_hooks.reviewer_did_init.append(init)
-
-
-# Start 
+# Start
 #########################################################################
+@gui_hooks.reviewer_did_show_question.append
 def start_timer(card: Card) -> None:
     global start
 
     # only set start time for the first question shown
     if start == None:
         start = datetime.now(timezone.utc)
-
-
-gui_hooks.reviewer_did_show_question.append(start_timer)
 
 
 # End
